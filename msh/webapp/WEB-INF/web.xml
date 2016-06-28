@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <display-name>msh</display-name>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:spring/*.xml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>msh.webapp.root</param-value>
+    </context-param>
+    <!-- log4j -->
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>classpath*:log4j.properties</param-value>
+    </context-param>
+    <context-param>
+        <param-name>log4jRefreshInterval</param-name>
+        <param-value>3000</param-value>
+    </context-param>
+    <!--
+        <listener>
+            <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+        </listener>-->
+
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <!-- 在里面实现ContextLoaderListener的调用 -->
+    <listener>
+        <listener-class>core.web.MSHContextLoaderListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>chineseFilter</filter-name>
+        <filter-class>core.web.ChineseFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>chineseFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->
+    <!-- 这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/> -->
+    <!-- 使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤 -->
+    <!-- 通常会将此filter-mapping放置到最前面(即其他filter-mapping前面),以保证它是过滤器链中第一个起作用的 -->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <!-- 该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理 -->
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- sitemesh filter-->
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <servlet>
+        <servlet-name>springmvc</servlet-name>
+        <servlet-class>core.web.MSHDispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>detectAllHandlerExceptionResolvers</param-name>
+            <!-- 取消其自动注册的异常解析器 -->
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springmvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+
+    <session-config>
+        <!-- 1个小时过期 -->
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/unauthorized.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/index.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/index.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/403.jsp</location>
+    </error-page>
+</web-app>

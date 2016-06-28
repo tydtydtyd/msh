@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field">
+    <class name="com.msh.model.entity.system.SystemRole" table="system_role" dynamic-insert="true" dynamic-update="true">
+        <id name="id" column="id" type="java.lang.Integer">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" type="java.lang.String"/>
+        <property name="code" column="code" type="java.lang.String"/>
+        <property name="authority" column="authority" type="java.lang.String"/>
+        <property name="updateTime" column="update_time" type="org.joda.time.contrib.hibernate.PersistentDateTime"/>
+    </class>
+</hibernate-mapping>

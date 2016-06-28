@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators defaultdir="/WEB-INF/jsp/decorators">
+    <decorator name="system_header" page="system_header.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+
+    <excludes>
+        <pattern>/favicon.ico</pattern>
+        <pattern>/error/*</pattern>
+        <pattern>/static/**</pattern>
+        <pattern>/index.jsp*</pattern>
+        <pattern>/login*</pattern>
+        <pattern>/404.jsp*</pattern>
+        <pattern>/404*</pattern>
+        <pattern>/403.jsp*</pattern>
+        <pattern>/403*</pattern>
+        <pattern>/exception.jsp*</pattern>
+        <pattern>/exception*</pattern>
+
+
+        <pattern>/entry/user/goSaveOrUpdate*</pattern>
+        <pattern>/entry/salary/goSaveOrUpdate*</pattern>
+    </excludes>
+</decorators>

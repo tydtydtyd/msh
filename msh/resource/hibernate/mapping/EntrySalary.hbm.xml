@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field">
+    <class name="com.msh.model.entity.entry.EntrySalary" table="entry_salary" dynamic-insert="true" dynamic-update="true">
+        <id name="id" column="id" type="java.lang.Integer">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="entryUser" column="user_id" class="com.msh.model.entity.entry.EntryUser" not-found="ignore"/>
+        <property name="creationTime" column="creation_time" type="org.joda.time.contrib.hibernate.PersistentDateTime"/>
+        <property name="updateTime" column="update_time" type="org.joda.time.contrib.hibernate.PersistentDateTime"/>
+        <property name="salary" column="salary" type="java.math.BigDecimal"/>
+        <property name="salaryDate" column="salary_date" type="org.joda.time.contrib.hibernate.PersistentLocalDate"/>
+    </class>
+</hibernate-mapping>

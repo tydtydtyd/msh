@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field">
+    <class name="com.msh.model.entity.system.SystemUser" table="system_user" dynamic-insert="true" dynamic-update="true">
+        <id name="id" column="id" type="java.lang.Integer">
+            <generator class="native"/>
+        </id>
+        <property name="username" column="username" type="java.lang.String"/>
+        <property name="gender" column="gender">
+            <type name="core.hibernate.EnumIntType">
+                <param name="enumClass">com.msh.model.entity.Enum.Gender</param>
+            </type>
+        </property>
+        <property name="phone" column="phone" type="java.lang.String"/>
+        <property name="account" column="account" type="java.lang.String"/>
+        <property name="password" column="password" type="java.lang.String"/>
+        <property name="lastLoginTime" column="last_login_time" type="org.joda.time.contrib.hibernate.PersistentDateTime"/>
+        <property name="status" column="status">
+            <type name="core.hibernate.EnumIntType">
+                <param name="enumClass">com.msh.model.entity.Enum.Status</param>
+            </type>
+        </property>
+        <many-to-one name="role" column="role_id" class="com.msh.model.entity.system.SystemRole"/>
+    </class>
+</hibernate-mapping>
