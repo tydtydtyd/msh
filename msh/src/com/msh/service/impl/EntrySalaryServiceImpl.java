@@ -30,7 +30,7 @@ public class EntrySalaryServiceImpl implements EntrySalaryService {
 	public Pagination<EntrySalaryDTO> browsePage(EntrySalaryDTO entrySalaryDTO, Pagination<EntrySalaryDTO> pagination) {
 		String hql = "from EntrySalary e order by e.id desc";
 		Pagination<EntrySalary> entrySalaryPagination = EntrySalaryDTO.toPageDomain(pagination);
-		entrySalaryPagination = entrySalaryDao.queryHQLForPage(hql.toString(), new ArrayList<Object>(), entrySalaryPagination);
+		entrySalaryPagination = entrySalaryDao.queryHQLForPage(hql, new ArrayList<Object>(), entrySalaryPagination);
 		if (!ValidationUtils.isNullObject(entrySalaryPagination)) {
 			pagination = EntrySalaryDTO.toPages(entrySalaryPagination);
 		}

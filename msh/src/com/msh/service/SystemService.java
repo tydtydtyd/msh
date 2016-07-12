@@ -1,7 +1,9 @@
 package com.msh.service;
 
+import com.msh.model.dto.SystemUserDTO;
 import com.msh.model.entity.system.SystemRole;
 import com.msh.model.entity.system.SystemUser;
+import core.utils.Pagination;
 
 /**
  * @author Tang Yong Di
@@ -13,4 +15,6 @@ public interface SystemService {
     SystemRole getRoleByUserId(Integer uid) throws Exception;
 
     void updateLastLoginTime(String account);
+
+    Pagination<SystemUserDTO> browseUserPage(SystemUserDTO systemUserDTO, Pagination<SystemUserDTO> pagination);
 }

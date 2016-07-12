@@ -34,9 +34,9 @@ public class SystemUserController {
         pagination.setCurrentPage(systemUserDTO.getCurrentPage());
         pagination.setPageSize(pagination.getPageSize());
         pagination.setQueryAll(false);
-        //pagination = systemService.browsePage(systemUserDTO, pagination);
+        pagination = systemService.browseUserPage(systemUserDTO, pagination);
         model.put("pagination", pagination);
         model.put("systemUserDTO", systemUserDTO);
-        return new ModelAndView("system/system_user", model);
+        return new ModelAndView("/system/system_user", model);
     }
 }

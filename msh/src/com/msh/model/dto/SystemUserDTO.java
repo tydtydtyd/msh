@@ -6,6 +6,10 @@ import com.msh.model.entity.system.SystemRole;
 import com.msh.model.entity.system.SystemUser;
 import core.utils.BaseForm;
 import core.utils.JodaUtils;
+import core.utils.Pagination;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tang Yong Di
@@ -21,6 +25,7 @@ public class SystemUserDTO extends BaseForm {
     private String lastLoginTime;
     private Status status;
     private Integer roleId;
+    private String roleName;
 
     public SystemUserDTO() {
     }
@@ -37,7 +42,22 @@ public class SystemUserDTO extends BaseForm {
         SystemRole role = user.getRole();
         if(role != null) {
             this.roleId = role.id();
+            this.roleName = role.getName();
         }
+    }
+
+    public static Pagination<SystemUserDTO> toPages(Pagination<SystemUser> systemUserPagination) {
+        Pagination<SystemUserDTO> pagination = new Pagination<>(systemUserPagination.getTotalCount(), systemUserPagination.getCurrentPage(),
+                systemUserPagination.getPageSize(), systemUserPagination.getSumPage(), systemUserPagination.isQueryAll(), systemUserPagination.getSortName(),
+                systemUserPagination.getSortType());
+        List<SystemUser> systemUserList = systemUserPagination.getList();
+        List<SystemUserDTO> systemUserDTOs = new ArrayList<>();
+        for (SystemUser systemUser : systemUserList) {
+            SystemUserDTO systemUserDTO = new SystemUserDTO(systemUser);
+            systemUserDTOs.add(systemUserDTO);
+        }
+        pagination.setList(systemUserDTOs);
+        return pagination;
     }
 
     public Integer getId() {
@@ -102,5 +122,13 @@ public class SystemUserDTO extends BaseForm {
 
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

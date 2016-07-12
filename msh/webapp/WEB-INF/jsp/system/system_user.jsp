@@ -46,17 +46,17 @@
 <body>
 <div class="row">
     <div class="col-xs-12">
-        <form id="search_form" class="form-inline" action="/entry/user/list" method="post" role="form">
+        <form id="search_form" class="form-inline" action="/system/user/list" method="post" role="form">
             姓名/手机号：
-            <input type="text" class="input-sm form-control" placeholder="姓名/手机号" name="name" value="${entryUserDTO.name}" maxlength="11">&nbsp;&nbsp;
-            入职日期：
-            <div class="input-daterange input-group">
-                <input type="text" class="input-sm form-control" name="beginDate" value="${entryUserDTO.beginDate}" />
+            <input type="text" class="input-sm form-control" placeholder="姓名/账号" name="username" value="${systemUserDTO.username}" maxlength="11">&nbsp;&nbsp;
+            角色：
+            <%--<div class="input-daterange input-group">
+                <input type="text" class="input-sm form-control" name="beginDate" value="${systemUserDTO.beginDate}" />
 				    <span class="input-group-addon">
 					    <i class="fa fa-exchange"></i>
 				    </span>
                 <input type="text" class="input-sm form-control" name="endDate" value="${entryUserDTO.endDate}"/>
-            </div>
+            </div>--%>
             <button class="btn btn-white btn-info btn-round" type="submit">
                 <i class="ace-icon glyphicon glyphicon-search blue"></i>
                 查询
@@ -97,10 +97,12 @@
                         <tbody>
                         <c:forEach items="${pagination.list}" var="user">
                             <tr>
-                                <td>${user.name}</td>
+                                <td>${user.username}</td>
+                                <td>${user.account}</td>
                                 <td>${user.gender.label}</td>
-                                <td class="hidden-480">${user.telephone}</td>
-                                <td>${user.joinDate}</td>
+                                <td>${user.roleName}</td>
+                                <td>${user.lastLoginTime}</td>
+                                <td>${user.status.label}</td>
                                 <td>
                                     <div class="hidden-sm hidden-xs action-buttons">
                                         <a class="green" href="#" title="编辑" onclick="saveOrUpdateUser('编辑入职人员', ${user.id})">
