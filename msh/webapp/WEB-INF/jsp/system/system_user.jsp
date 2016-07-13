@@ -8,38 +8,46 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title></title>
-    <script type="application/javascript">
-        $(function(){
-            $('.input-daterange').datepicker({autoclose:true});
-        });
-
-        //新增
-        function saveOrUpdateUser(title, id){
-            var params = isEmpty(id) ? '' : '?id='+id;
-            msh.util.openUrl(title, '/entry/user/goSaveOrUpdate' + params, '400px', '600px');
-        }
-
-        //删除
-        function deleteUser(id){
-            msh.util.confirm("你确定要删除该入职人员吗？", {
-                ok: function () {
-                    msh.ajax.doAjax({
-                        method: 'post',
-                        url: '/entry/user/delete',
-                        data: {id: id},
-                        success: function (result) {
-                            if(result.success) {
-                                msh.util.alert("删除成功", {ok:function(){
-                                    reload();
-                                }});
-                            }else {
-                                msh.util.alert(result.message);
-                            }
+    <title>系统用户</title>
+    <script type="text/javascript">
+        jQuery(function($) {
+            $("#searchSystemUserName").autocomplete({
+                source: function (request, response) {
+                    showSearchLoading();
+                    $.ajax({
+                        url: "/entry/user/getUserList",
+                        data: {name: $("#searchEntryUserName").val()},
+                        success: function (data) {
+                            hideSearchLoading();
+                            response($.map(data.users, function (item) {
+                                return {
+                                    label: item.name + " (" + item.telephone + ")",
+                                    id: item.id
+                                }
+                            }));
                         }
                     });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $('#entryUserName').val(ui.item.label);
+                    $('#entryUserId').val(ui.item.id);
+                },
+                open: function () {
+                    $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+                },
+                close: function () {
+                    $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
                 }
             });
+        });
+
+        function showSearchLoading(){
+            $('#search_loading').show();
+        }
+
+        function hideSearchLoading(){
+            $('#search_loading').hide();
         }
     </script>
 </head>
@@ -50,13 +58,10 @@
             姓名/手机号：
             <input type="text" class="input-sm form-control" placeholder="姓名/账号" name="username" value="${systemUserDTO.username}" maxlength="11">&nbsp;&nbsp;
             角色：
-            <%--<div class="input-daterange input-group">
-                <input type="text" class="input-sm form-control" name="beginDate" value="${systemUserDTO.beginDate}" />
-				    <span class="input-group-addon">
-					    <i class="fa fa-exchange"></i>
-				    </span>
-                <input type="text" class="input-sm form-control" name="endDate" value="${entryUserDTO.endDate}"/>
-            </div>--%>
+            <span class="input-icon input-icon-right">
+                <input type="text" class="width-100" id="searchSystemUserName" name="searchSystemUserName" placeholder="搜索并选择角色" maxlength="11">
+                <span id="search_loading" style="display: none" class="ace-icon fa fa-spinner fa-spin orange bigger-175"></span>
+            </span>
             <button class="btn btn-white btn-info btn-round" type="submit">
                 <i class="ace-icon glyphicon glyphicon-search blue"></i>
                 查询

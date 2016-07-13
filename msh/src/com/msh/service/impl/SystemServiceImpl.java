@@ -61,9 +61,9 @@ public class SystemServiceImpl implements SystemService {
         hql.append("from SystemUser s where 1=1 ");
         if(ValidationUtils.isNotNullObject(systemUserDTO)) {
             if(ValidationUtils.isNotEmpty(systemUserDTO.getUsername())) {
-                hql.append("and (s.username=? ").append("or s.account=?) ");
-                params.add(systemUserDTO.getUsername());
-                params.add(systemUserDTO.getPhone());
+                hql.append("and (s.username like ? ").append("or s.account like ?) ");
+                params.add("%" + systemUserDTO.getUsername() + "%");
+                params.add("%" + systemUserDTO.getUsername() + "%");
             }
             if(systemUserDTO.getRoleId() != null) {
                 hql.append("and s.role.id=? ");
@@ -72,7 +72,7 @@ public class SystemServiceImpl implements SystemService {
         }
         hql.append("order by s.id desc");
         Pagination<SystemUser> systemUserPagination = SystemUserDTO.toPageDomain(pagination);
-        systemUserPagination = systemDao.queryHQLForPage(hql.toString(), new ArrayList<Object>(), systemUserPagination);
+        systemUserPagination = systemDao.queryHQLForPage(hql.toString(), params, systemUserPagination);
         if (!ValidationUtils.isNullObject(systemUserPagination)) {
             pagination = SystemUserDTO.toPages(systemUserPagination);
         }
