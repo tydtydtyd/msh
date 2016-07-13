@@ -15,23 +15,22 @@
                 source: function (request, response) {
                     showSearchLoading();
                     $.ajax({
-                        url: "/entry/user/getUserList",
-                        data: {name: $("#searchEntryUserName").val()},
+                        url: "/system/role/getRoleList",
+                        data: {name: $("#searchSystemUserName").val()},
                         success: function (data) {
                             hideSearchLoading();
-                            response($.map(data.users, function (item) {
+                            response($.map(data.roles, function (item) {
                                 return {
-                                    label: item.name + " (" + item.telephone + ")",
+                                    label: item.name,
                                     id: item.id
                                 }
                             }));
                         }
                     });
                 },
-                minLength: 1,
+                minLength: 0,
                 select: function (event, ui) {
-                    $('#entryUserName').val(ui.item.label);
-                    $('#entryUserId').val(ui.item.id);
+                    $('#systemRoleId').val(ui.item.id);
                 },
                 open: function () {
                     $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
@@ -61,6 +60,7 @@
             <span class="input-icon input-icon-right">
                 <input type="text" class="width-100" id="searchSystemUserName" name="searchSystemUserName" placeholder="搜索并选择角色" maxlength="11">
                 <span id="search_loading" style="display: none" class="ace-icon fa fa-spinner fa-spin orange bigger-175"></span>
+                <input type="hidden" name="roleId" value="${systemUserDTO.roleId}">
             </span>
             <button class="btn btn-white btn-info btn-round" type="submit">
                 <i class="ace-icon glyphicon glyphicon-search blue"></i>

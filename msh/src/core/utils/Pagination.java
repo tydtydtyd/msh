@@ -38,7 +38,7 @@ public class Pagination<T> implements Paging {
 
 	private Integer sumPage;
 
-	private boolean queryAll;
+	private boolean queryAll = false;
 
 	protected String sortName;
 	protected String sortType;

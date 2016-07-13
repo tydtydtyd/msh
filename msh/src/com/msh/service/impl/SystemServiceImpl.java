@@ -1,6 +1,7 @@
 package com.msh.service.impl;
 
 import com.msh.dao.SystemDao;
+import com.msh.model.dto.SystemRoleDTO;
 import com.msh.model.dto.SystemUserDTO;
 import com.msh.model.entity.system.SystemRole;
 import com.msh.model.entity.system.SystemUser;
@@ -8,13 +9,11 @@ import com.msh.service.SystemService;
 import core.utils.JodaUtils;
 import core.utils.Pagination;
 import core.utils.ValidationUtils;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Tang Yong Di
@@ -75,6 +74,26 @@ public class SystemServiceImpl implements SystemService {
         systemUserPagination = systemDao.queryHQLForPage(hql.toString(), params, systemUserPagination);
         if (!ValidationUtils.isNullObject(systemUserPagination)) {
             pagination = SystemUserDTO.toPages(systemUserPagination);
+        }
+        return pagination;
+    }
+
+    @Override
+    public Pagination<SystemRoleDTO> browseRolePage(SystemRoleDTO systemRoleDTO, Pagination<SystemRoleDTO> pagination) {
+        StringBuffer hql = new StringBuffer();
+        List<Object> params = new ArrayList<>();
+        hql.append("from SystemRole r where 1=1 ");
+        if(ValidationUtils.isNotNullObject(systemRoleDTO)) {
+            if(ValidationUtils.isNotEmpty(systemRoleDTO.getName())) {
+                hql.append("and r.name like ? ");
+                params.add("%" + systemRoleDTO.getName() + "%");
+            }
+        }
+        hql.append("order by r.id desc");
+        Pagination<SystemRole> systemRolePagination = SystemRoleDTO.toPageDomain(pagination);
+        systemRolePagination = systemDao.queryHQLForPage(hql.toString(), params, systemRolePagination);
+        if (!ValidationUtils.isNullObject(systemRolePagination)) {
+            pagination = SystemRoleDTO.toPages(systemRolePagination);
         }
         return pagination;
     }

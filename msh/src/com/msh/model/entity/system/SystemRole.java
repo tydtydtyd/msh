@@ -8,12 +8,22 @@ import org.joda.time.DateTime;
  * @date 2016/3/21
  */
 public class SystemRole extends AbstractDomain {
+    private Integer id;
     private String name;
     private String code;
     private String authority;
     private DateTime updateTime;
 
     public SystemRole() {
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
